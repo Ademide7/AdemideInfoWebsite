@@ -6,7 +6,6 @@ using FluentValidation.AspNetCore;
 using AdemideInfoWebsite.Server.DICollection;
 using AdemideInfoWebsite.Infrastructure.Presistance.Contexts;
 using Microsoft.EntityFrameworkCore;
-using AdemideInfoWebsite.Server.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,16 +43,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Configure JWT Bearer authentication
-    options.ConfigureJwtBearer();
-
-    // Optionally: Add XML comments for better API documentation
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // if (File.Exists(xmlPath))
-    // {
-    //     options.IncludeXmlComments(xmlPath);
-    // }
+    Console.WriteLine("[SWAGGER] Basic configuration complete. Bearer auth requires manual Swagger JSON editing due to .NET 10 + Swashbuckle compatibility issues.");
 });
 
 
@@ -66,6 +56,10 @@ app.MapStaticAssets();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Use middleware to inject Bearer authentication into Swagger JSON
+    app.UseMiddleware<AdemideInfoWebsite.Server.Middleware.SwaggerBearerMiddleware>();
+
     // Enable Swagger documentation endpoint in development
     app.UseSwagger();
     // Enable Swagger UI (interactive documentation at /swagger) in development
@@ -122,7 +116,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
             Console.WriteLine($"  📚 Swagger UI:  {address}/swagger");
             Console.WriteLine($"  📄 OpenAPI:     {address}/swagger/v1/swagger.json");
         }
-    }
+    } 
 
     Console.WriteLine(new string('=', 60));
     Console.WriteLine("  💡 Tip: Use the 'Authorize' button in Swagger to add JWT token");

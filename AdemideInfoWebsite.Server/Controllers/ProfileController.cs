@@ -12,6 +12,7 @@ public class ProfileController(IProfileService profileService) : ControllerBase
 {
     // endpoints for all profile related operations
     [HttpPost("create")]
+    [ProducesResponseType(typeof(ResponseModel<RegistrationResponseDto>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto createProfileDto)
     {
         var result = await profileService.RegisterAsync(createProfileDto.FirstName, createProfileDto.LastName, createProfileDto.Email, createProfileDto.Password, createProfileDto.Language);
@@ -19,26 +20,29 @@ public class ProfileController(IProfileService profileService) : ControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(ResponseModel<LoginResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Login([FromBody] LoginProfileDto loginDto)
     {
         var result = await profileService.LoginAsync(loginDto.Email, loginDto.Password);
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPut("edit")]   
+    [HttpPut("edit")]
+    [ProducesResponseType(typeof(ResponseModel<EditProfileResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> EditProfile([FromBody] EditProfileDto editProfileDto)
     {
         var userIdClaim = ClaimsExtensions.CurrentUserId(User);
         if (userIdClaim == Guid.Empty)
         {
             return StatusCode(StatusCodes.Status401Unauthorized,
-              new ResponseModel<bool>(false, false, StatusCodes.Status401Unauthorized, "User is not authenticated.", null));
+              new ResponseModel<EditProfileResponseDto>(null, false, StatusCodes.Status401Unauthorized, "User is not authenticated.", null));
         }
         var result = await profileService.EditProfileAsync(userIdClaim, editProfileDto.FirstName, editProfileDto.LastName, editProfileDto.Email);
         return StatusCode(result.StatusCode, result);
     }
 
     [HttpPost("change-password")]
+    [ProducesResponseType(typeof(ResponseModel), StatusCodes.Status200OK)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
     {
         var userIdClaim = ClaimsExtensions.CurrentUserId(User);
@@ -52,6 +56,7 @@ public class ProfileController(IProfileService profileService) : ControllerBase
     }
 
     [HttpPost("send-password-reset-email")]
+    [ProducesResponseType(typeof(ResponseModel<SendPasswordResetEmailResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SendPasswordResetEmail([FromBody] SendPasswordResetEmailDto sendPasswordResetEmailDto)
     {
         var result = await profileService.SendPasswordResetEmailAsync(sendPasswordResetEmailDto.Email);

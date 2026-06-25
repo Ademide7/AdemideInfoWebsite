@@ -8,4 +8,5 @@
   <Project Path="AdemideInfoWebsite.Infrastructure/AdemideInfoWebsite.Infrastructure.csproj" />
   <Project Path="AdemideInfoWebsite.Server/AdemideInfoWebsite.Server.csproj" />
   <Project Path="AdemideInfoWebsite.SharedKernel/AdemideInfoWebsite.SharedKernel.csproj" />
+  <Project Path="AdemideInfoWebsite.Tests/AdemideInfoWebsite.Tests.csproj" />
 </Solution>
