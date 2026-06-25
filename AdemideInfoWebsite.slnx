@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="AdemideInfoWebsite.Application/AdemideInfoWebsite.Application.csproj" />
+  <Project Path="ademideinfowebsite.client/ademideinfowebsite.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="AdemideInfoWebsite.Domain/AdemideInfoWebsite.Domain.csproj" />
+  <Project Path="AdemideInfoWebsite.Infrastructure/AdemideInfoWebsite.Infrastructure.csproj" />
+  <Project Path="AdemideInfoWebsite.Server/AdemideInfoWebsite.Server.csproj" />
+  <Project Path="AdemideInfoWebsite.SharedKernel/AdemideInfoWebsite.SharedKernel.csproj" />
+</Solution>
