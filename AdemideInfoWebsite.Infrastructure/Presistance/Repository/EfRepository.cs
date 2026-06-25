@@ -31,5 +31,11 @@ public sealed class EfRepository<T>(MainDbContext dbContext) : IRepository<T> wh
     public void Update(T entity) => dbContext.Set<T>().Update(entity);
 
     public void Remove(T entity, CancellationToken cancellationToken = default) => dbContext.Set<T>().Remove(entity);
+
+    //count entities
+    public Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default) =>
+        predicate is null
+            ? dbContext.Set<T>().CountAsync(cancellationToken)
+            : dbContext.Set<T>().CountAsync(predicate, cancellationToken);
 }
 

@@ -16,8 +16,6 @@ public class Profile : Entity
     public IReadOnlyList<UserActivity> UserActivities { get; private set; } = new List<UserActivity>();
 
 
-
-
     // create profile method
     public static Profile CreateProfile(string firstName, string lastName, string email, Language language)
     {
