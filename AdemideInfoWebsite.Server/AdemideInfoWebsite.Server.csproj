@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>10.*-*</Version>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,11 @@
     </ProjectReference>
     <ProjectReference Include="..\AdemideInfoWebsite.Infrastructure\AdemideInfoWebsite.Infrastructure.csproj" />
     <ProjectReference Include="..\AdemideInfoWebsite.SharedKernel\AdemideInfoWebsite.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
 
 </Project>

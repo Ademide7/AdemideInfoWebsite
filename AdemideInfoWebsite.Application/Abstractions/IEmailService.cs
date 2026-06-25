@@ -1,5 +1,4 @@
-﻿using AdemideInfoWebsite.Application.Dtos;
-using AdemideInfoWebsite.Infrastructure.ThirdPartyServices.Models;
+﻿using AdemideInfoWebsite.Application.Dtos; 
 using AdemideInfoWebsite.SharedKernel.Models;
 using System;
 using System.Collections.Generic;

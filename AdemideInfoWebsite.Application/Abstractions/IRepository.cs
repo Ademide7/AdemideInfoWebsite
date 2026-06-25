@@ -11,6 +11,5 @@ public interface IRepository<T> where T : class
     Task<T?> FirstOrDefaultAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>>? shape = null, CancellationToken cancellationToken = default);
-    void Remove(T entity);
     void Update(T entity);
 }

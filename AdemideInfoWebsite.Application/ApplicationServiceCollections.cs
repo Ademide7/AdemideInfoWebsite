@@ -1,7 +1,5 @@
 ﻿using AdemideInfoWebsite.Application.Abstractions;
-using AdemideInfoWebsite.Application.Services;
-using AdemideInfoWebsite.Infrastructure.Presistance.Repository;
-using AdemideInfoWebsite.Infrastructure.ThirdPartyServices;
+using AdemideInfoWebsite.Application.Services; 
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using static AdemideInfoWebsite.Application.Validations.FluentValidations;

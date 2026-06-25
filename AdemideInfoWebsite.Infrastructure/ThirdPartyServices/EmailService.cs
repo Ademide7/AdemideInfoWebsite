@@ -2,6 +2,7 @@
 using AdemideInfoWebsite.Application.Dtos;
 using AdemideInfoWebsite.Infrastructure.ThirdPartyServices.Models;
 using AdemideInfoWebsite.SharedKernel.Models;
+using Microsoft.Extensions.Options;
 
 namespace AdemideInfoWebsite.Infrastructure.ThirdPartyServices;
 
@@ -9,9 +10,9 @@ namespace AdemideInfoWebsite.Infrastructure.ThirdPartyServices;
 public class EmailService : IEmailService
 {
     private readonly EmailSettings _emailSettings;
-    public EmailService(EmailSettings emailSettings)
+    public EmailService(IOptions<EmailSettings> emailSettings)
     {
-        _emailSettings = emailSettings;
+        _emailSettings = emailSettings.Value;
     }
     public async Task<ResponseModel<EmailServiceResponse>> SendEmailAsync(EmailServiceRequest emailRequest)
     {

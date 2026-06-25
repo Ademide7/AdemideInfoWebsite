@@ -10,6 +10,9 @@ public class Password : Entity
     public string? Salt { get; private set; }
     public DateTime? LastModifiedAt { get; private set; }
 
+    public Guid ProfileID { get; private set; }
+    public Profile Profile { get; private set; } = null!;
+
     // create password method
     public static Password CreatePassword(string hashedPassword, string salt)
     {

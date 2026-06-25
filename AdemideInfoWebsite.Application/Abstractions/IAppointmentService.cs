@@ -9,7 +9,7 @@ namespace AdemideInfoWebsite.Application.Abstractions;
 
 public interface IAppointmentService
 {
-    Task<ResponseModel<bool>> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto);
+    Task<ResponseModel<bool>> CreateAppointmentAsync(Guid profileId,CreateAppointmentDto createAppointmentDto);
     Task<ResponseModel<List<Appointment>>> GetAppointmentsByProfileIdAsync(Guid profileId, int pageNumber, int pageSize, string sortBy, bool isAscending);
     Task<ResponseModel<bool>> MarkAppointmentAsCompletedAsync(Guid appointmentId);
 }

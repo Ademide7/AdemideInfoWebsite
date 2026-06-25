@@ -17,13 +17,13 @@ public class AppointmentService(IUnitOfWork unitOfWork,IEmailService emailServic
     // Method to create an appointment and send a confirmation email using dtos.
     // check if there is an existing appointment that is still active and not completed, mark it as completed and create a new appointment. 
 
-    public async Task<ResponseModel<bool>> CreateAppointmentAsync(CreateAppointmentDto createAppointmentDto)
+    public async Task<ResponseModel<bool>> CreateAppointmentAsync(Guid profileId, CreateAppointmentDto createAppointmentDto)
     {
         //validate profileId.
-        var profile = await unitOfWork.Repository<Profile>().GetByIdAsync(createAppointmentDto.ProfileId);
+        var profile = await unitOfWork.Repository<Profile>().GetByIdAsync(profileId);
         if (profile is null) return new ResponseModel<bool>(false, false, 400, "Something went wrong!", null);
 
-        var existingAppointment = await unitOfWork.Repository<Appointment>().FirstOrDefaultAsync(a => a.ProfileId == createAppointmentDto.ProfileId && !a.IsCompleted);
+        var existingAppointment = await unitOfWork.Repository<Appointment>().FirstOrDefaultAsync(a => a.ProfileId == profileId && !a.IsCompleted);
         if (existingAppointment != null)
         {
             existingAppointment.MarkAsCompleted();
