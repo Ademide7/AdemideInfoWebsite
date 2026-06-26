@@ -1,17 +1,20 @@
 ﻿using AdemideInfoWebsite.Application.Abstractions;
 using AdemideInfoWebsite.Application.Dtos;
 using AdemideInfoWebsite.SharedKernel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdemideInfoWebsite.Server.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class ProfileController(IProfileService profileService) : ControllerBase
 {
     // endpoints for all profile related operations
     [HttpPost("create")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ResponseModel<RegistrationResponseDto>), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto createProfileDto)
     {
@@ -20,6 +23,7 @@ public class ProfileController(IProfileService profileService) : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(ResponseModel<LoginResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Login([FromBody] LoginProfileDto loginDto)
     {
@@ -27,7 +31,7 @@ public class ProfileController(IProfileService profileService) : ControllerBase
         return StatusCode(result.StatusCode, result);
     }
 
-    [HttpPut("edit")]
+    [HttpPut("edit")] 
     [ProducesResponseType(typeof(ResponseModel<EditProfileResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> EditProfile([FromBody] EditProfileDto editProfileDto)
     {
@@ -60,6 +64,16 @@ public class ProfileController(IProfileService profileService) : ControllerBase
     public async Task<IActionResult> SendPasswordResetEmail([FromBody] SendPasswordResetEmailDto sendPasswordResetEmailDto)
     {
         var result = await profileService.SendPasswordResetEmailAsync(sendPasswordResetEmailDto.Email);
+        return StatusCode(result.StatusCode, result);
+    }
+
+    //refresh token endpoint to refresh the token and return a new token
+    [HttpPost("refresh-token")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ResponseModel<LoginResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> RefreshToken([FromBody] string token)
+    {
+        var result = await profileService.RefreshTokenAsync(token);
         return StatusCode(result.StatusCode, result);
     }
 

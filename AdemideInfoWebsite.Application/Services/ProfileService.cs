@@ -3,13 +3,14 @@ using AdemideInfoWebsite.Application.Dtos;
 using AdemideInfoWebsite.Application.Utilities;
 using AdemideInfoWebsite.Domain.Entities;
 using AdemideInfoWebsite.SharedKernel;
-using AdemideInfoWebsite.SharedKernel.Models;
 using AdemideInfoWebsite.SharedKernel;
+using AdemideInfoWebsite.SharedKernel.Models;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using Util = AdemideInfoWebsite.SharedKernel.Utilities;
-using Microsoft.Extensions.Options;
 
 namespace AdemideInfoWebsite.Application.Services;
 
@@ -23,7 +24,10 @@ public class ProfileService(IUnitOfWork unitOfWork,IEmailService emailService, I
     public async Task<ResponseModel<LoginResponseDto>> LoginAsync(string email, string password)
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return new ResponseModel<LoginResponseDto>(null, false, 400, "Email or password is null or empty", null);
-        var profile = await unitOfWork.Repository<Domain.Entities.Profile>().FirstOrDefaultAsync(p => p.Email == email);
+        var profile = await unitOfWork.Repository<Domain.Entities.Profile>().FirstOrDefaultAsync(p => p.Email == email, includes: new Expression<Func<Profile, object>>[]
+    { 
+        x => x.Password
+    });
 
         if (profile == null) return new ResponseModel<LoginResponseDto>(null, false, 404, "Profile not found", null);
         var hashedPassword = Util.HashPassword(password, email);
@@ -121,6 +125,20 @@ public class ProfileService(IUnitOfWork unitOfWork,IEmailService emailService, I
 
         var responseDto = new SendPasswordResetEmailResponseDto(true, "Password reset email sent successfully");
         return new ResponseModel<SendPasswordResetEmailResponseDto>(responseDto, true, 200, "Password reset email sent successfully", null);
+    }
+
+    //refresh token  method.
+    public async Task<ResponseModel<LoginResponseDto>> RefreshTokenAsync(string token)
+    {
+        var principal = _authTokenService.GetPrincipalFromExpiredToken(token);
+        if (principal == null) return new ResponseModel<LoginResponseDto>(null, false, 401, "Invalid token", null);
+        var email = principal.Identity?.Name;
+        if (string.IsNullOrWhiteSpace(email)) return new ResponseModel<LoginResponseDto>(null, false, 401, "Invalid token", null);
+        var profile = await unitOfWork.Repository<Domain.Entities.Profile>().FirstOrDefaultAsync(p => p.Email == email);
+        if (profile == null) return new ResponseModel<LoginResponseDto>(null, false, 404, "Profile not found", null);
+        string newToken = _authTokenService.CreateAccessToken(profile);
+        var loginResponse = profile.ToLoginResponseDto(newToken);
+        return new ResponseModel<LoginResponseDto>(loginResponse, true, 200, "Token refreshed successfully", null);
     }
 
 }

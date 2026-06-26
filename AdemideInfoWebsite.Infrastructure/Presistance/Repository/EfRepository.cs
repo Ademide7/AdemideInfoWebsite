@@ -18,6 +18,21 @@ public sealed class EfRepository<T>(MainDbContext dbContext) : IRepository<T> wh
     public Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
         dbContext.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
 
+    public async Task<T?> FirstOrDefaultAsync(
+    Expression<Func<T, bool>> predicate,
+    CancellationToken cancellationToken = default,
+    params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = dbContext.Set<T>();
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return await query.FirstOrDefaultAsync(predicate, cancellationToken);
+    }
+
     public Task<List<T>> ListAsync(Func<IQueryable<T>, IQueryable<T>>? shape = null, CancellationToken cancellationToken = default)
     {
         var query = shape?.Invoke(dbContext.Set<T>()) ?? dbContext.Set<T>();

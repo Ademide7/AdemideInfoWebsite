@@ -15,7 +15,7 @@ public class SwaggerBearerMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         // Only intercept Swagger JSON requests
-        if (context.Request.Path.StartsWithSegments("/swagger") && 
+        if (context.Request.Path.StartsWithSegments("/swagger") &&
             context.Request.Path.Value?.EndsWith("/swagger.json") == true)
         {
             // Capture the response

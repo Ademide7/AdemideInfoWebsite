@@ -1,6 +1,10 @@
-﻿using AdemideInfoWebsite.SharedKernel.Models;
+﻿using AdemideInfoWebsite.Infrastructure.ThirdPartyServices.Models;
+using AdemideInfoWebsite.SharedKernel.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AdemideInfoWebsite.Server.DICollection;
 
@@ -35,4 +39,6 @@ public static class MainCollections
     {
          services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
     }
+
+     
 }

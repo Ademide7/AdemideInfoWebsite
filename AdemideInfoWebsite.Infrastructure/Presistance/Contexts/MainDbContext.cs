@@ -31,26 +31,27 @@ public class MainDbContext : DbContext
             entity.HasMany(e => e.Appointments).WithOne().HasForeignKey("ProfileId");
             entity.HasMany(e => e.UserActivities).WithOne().HasForeignKey("ProfileId");
         });
+
         modelBuilder.Entity<Password>(entity =>
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.HashedPassword).IsRequired();
-        });
-        modelBuilder.Entity<Appointment>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Title).IsRequired();
-            entity.Property(e => e.Description).IsRequired();
-            entity.Property(e => e.AppointmentDate).IsRequired();
-            entity.Property(e => e.IsCompleted).IsRequired();
-        });
+        }); 
+
+        modelBuilder.Entity<Appointment>()
+    .HasOne(a => a.Profile)
+    .WithMany(p => p.Appointments)
+    .HasForeignKey(a => a.ProfileId)
+    .OnDelete(DeleteBehavior.NoAction);
+
+        // or NoAction
         modelBuilder.Entity<UserActivity>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.UserId).IsRequired();
-            entity.Property(e => e.UserName).IsRequired();
-            entity.Property(e => e.ActivityType).IsRequired();
-            entity.Property(e => e.IPAddress).IsRequired();
+            entity.HasOne(u => u.Profile)
+                  .WithMany(p => p.UserActivities)
+                  .HasForeignKey(u => u.ProfileId)
+                  .OnDelete(DeleteBehavior.NoAction); // or Restrict
         });
     }
 }

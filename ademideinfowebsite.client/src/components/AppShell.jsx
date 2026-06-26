@@ -1,63 +1,43 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material';
-import { Link, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Box, Toolbar } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
+import Navbar from "./NavBar";
+import SideMenu from "../components/SideMenu";
+import Footer from "../components/Footer";
 
-export function AppShell() {
-    const { user, logout } = useAuth();
-    console.log(`[APP SHELL] Current user: ${user}`);
-    console.log('[APP SHELL] Rendering navigation with user:', user?.email || 'Not logged in');
-
+export default function AppShell() {
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: '#fff', color: '#17202a' }}>
-            {/* Navigation bar */}
-            <AppBar position="sticky" elevation={1} color="inherit">
-                <Toolbar sx={{ gap: 2, flexWrap: 'wrap' }}>
-                    {/* App logo/title */}
-                    <Typography component={Link} to="/" variant="h6" sx={{ color: 'inherit', textDecoration: 'none', fontWeight: 800 }}>
-                        FoodFlow
-                    </Typography>
+        <Box sx={{ display: "flex", minHeight: "100vh" }}>
+            {/* Sidebar */}
+            <SideMenu />
 
-                    {/* Navigation links */}
-                    <Button component={Link} to="/home">Home</Button>
-                    <Button component={Link} to="/cart">Cart</Button>
-                    <Button component={Link} to="/orders">Orders</Button>
-                    <Button component={Link} to="/dashboard">Dashboard</Button>
+            {/* Main Content */}
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    bgcolor: "#f5f5f5",
+                    minHeight: "100vh",
+                }}
+            >
+                <Navbar />
 
-                    {/* Spacer to push auth buttons to the right */}
-                    <Box sx={{ flex: 1 }} />
+                {/* Prevent content from hiding behind AppBar */}
+                <Toolbar />
 
-                    {/* User info and logout button (shown when logged in) */}
-                    {user ? (
-                        <>
-                            <Typography variant="body2">{user.fullName}</Typography>
-                            <Button onClick={() => {
-                                console.log('[APP SHELL] User clicked logout');
-                                logout();
-                            }}>Logout</Button>
-                        </>
-                    ) : (
-                        // Login/Register buttons (shown when logged out)
-                        <>
-                            <Button component={Link} to="/login">Login</Button>
-                            <Button component={Link} to="/register" variant="contained">Register</Button>
-                        </>
-                    )}
-                </Toolbar>
-            </AppBar>
+                <Box
+                    sx={{
+                        flexGrow: 1,
+                        p: 3,
+                    }}
+                >
+                    <Outlet />
+                </Box>
 
-            {/* Main content area - Outlet renders the current page */}
-            <Container maxWidth="lg" sx={{ py: 4 }}>
-                <Outlet />
-            </Container>
-
-            {/* Footer */}
-            <Box component="footer" sx={{ borderTop: '1px solid #edf0f2', py: 3, textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary">
-                    Fresh meals, clear tracking, simple dashboards.
-                </Typography>
+                <Footer />
             </Box>
         </Box>
     );
 }
-export default AppShell;

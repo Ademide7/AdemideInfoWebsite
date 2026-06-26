@@ -13,6 +13,12 @@ public static class ClaimsExtensions
     /// <exception cref="InvalidOperationException">Thrown if the user ID claim is missing or invalid</exception>
     public static Guid CurrentUserId(this ClaimsPrincipal user)
     {
+
+        foreach (var claim in user.Claims)
+        {
+            Console.WriteLine($"{claim.Type} = {claim.Value}");
+        }
+
         // Find the NameIdentifier claim which contains the user ID
         // This claim is set when the JWT token is created during login/registration
         var rawId = user.FindFirstValue(ClaimTypes.NameIdentifier);
