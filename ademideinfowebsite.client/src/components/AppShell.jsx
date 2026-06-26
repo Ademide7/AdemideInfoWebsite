@@ -1,9 +1,10 @@
 import { Box, Toolbar } from "@mui/material";
 import { Outlet } from "react-router-dom";
+ 
 
 import Navbar from "./NavBar";
-import SideMenu from "../components/SideMenu";
-import Footer from "../components/Footer";
+import SideMenu from "./SideMenu";
+import Footer from "./Footer";
 
 export default function AppShell() {
     return (

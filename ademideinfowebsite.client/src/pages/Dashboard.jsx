@@ -12,8 +12,7 @@ import EventIcon from "@mui/icons-material/Event";
 import PersonIcon from "@mui/icons-material/Person";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link } from "react-router-dom";
-import useAuth from "../Scripts/useAuth";
-
+import useAuth from "../context/useAuth";
 export default function Dashboard() {
     const { user } = useAuth();
 
