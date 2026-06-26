@@ -18,11 +18,13 @@ public static class MainCollections
         var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
         services.AddCors(options =>
         {
-            options.AddPolicy("CorsPolicy", builder =>
+            options.AddPolicy("CorsPolicy", policy =>
             {
-                builder.WithOrigins(allowedOrigins)
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
+                policy.WithOrigins(allowedOrigins)
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials(); // Only if you use cookies/auth credentials
+                       
             });
         });
     }

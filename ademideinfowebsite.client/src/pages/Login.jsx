@@ -10,10 +10,8 @@ import {
     Typography,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import useAuth from "../context/useAuth";
-
-const API_URL = "https://localhost:7151/api/Profile/login";
+import { apiClient, unwrapResponse } from "../api/client"; 
 
 export default function Login() {
     const navigate = useNavigate();
@@ -41,9 +39,9 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await axios.post(API_URL, form);
+            const response = await apiClient.post("/Profile/login", form);
 
-            const result = response.data;
+            const result = unwrapResponse(response);
 
             if (result.status) {
                 login(
@@ -57,6 +55,7 @@ export default function Login() {
             }
         } catch (err) {
             setError(
+                console.log(err) ||
                 err.response?.data?.message ||
                 "Unable to login."
             );
