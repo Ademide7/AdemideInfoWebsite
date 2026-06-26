@@ -53,7 +53,7 @@ export default function Home() {
                                 sx={{ mb: 3, fontWeight: 600 }}
                             />
 
-                            <Typography variant="h2" fontWeight={800}>
+                            <Typography variant="h2" fontWeight={800} color="text.danger">
                                 Ibrahim Ademide
                             </Typography>
 
