@@ -10,6 +10,12 @@ const theme = createTheme({
             dark: "#1E40AF",
             contrastText: "#fff",
         },
+        red: {
+            light: "#FCA5A5",
+            main: "#EF4444",
+            dark: "#B91C1C",
+            contrastText: "#FFFFFF",
+        },
 
         secondary: {
             main: "#7C3AED", // Purple Accent
